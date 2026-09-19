@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Market News Intelligence</title>
+
+<style>
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #0b1020;
+    color: #f5f7ff;
+}
+
+header {
+    padding: 20px;
+    border-bottom: 1px solid #252b42;
+    background: #10162a;
+}
+
+h1 {
+    margin: 0;
+    font-size: 24px;
+}
+
+.subtitle {
+    margin-top: 6px;
+    color: #8e97b5;
+    font-size: 13px;
+}
+
+.container {
+    max-width: 1200px;
+    margin: auto;
+    padding: 20px;
+}
+
+.status {
+    background: #121a31;
+    border: 1px solid #28304b;
+    padding: 14px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+}
+
+.status span {
+    color: #65e6a5;
+    font-weight: bold;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 16px;
+}
+
+.card {
+    background: #121a31;
+    border: 1px solid #28304b;
+    border-radius: 12px;
+    padding: 18px;
+}
+
+.card h2 {
+    margin-top: 0;
+    font-size: 17px;
+}
+
+.article {
+    border-top: 1px solid #252d47;
+    padding-top: 14px;
+    margin-top: 14px;
+}
+
+.title {
+    font-weight: bold;
+    line-height: 1.4;
+}
+
+.meta {
+    color: #8993b2;
+    font-size: 12px;
+    margin-top: 6px;
+}
+
+.summary {
+    color: #c9cee0;
+    font-size: 13px;
+    line-height: 1.5;
+    margin-top: 10px;
+}
+
+.impact {
+    margin-top: 10px;
+    font-size: 13px;
+}
+
+.badge {
+    display: inline-block;
+    padding: 4px 8px;
+    border-radius: 6px;
+    background: #242d49;
+    font-size: 11px;
+    margin-right: 5px;
+}
+
+a {
+    color: #7eb6ff;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+footer {
+    text-align: center;
+    color: #737c99;
+    padding: 30px;
+    font-size: 12px;
+}
+
+</style>
+</head>
+
+
+<body>
+
+<header>
+
+<h1>🌐 Market News Intelligence</h1>
+
+<div class="subtitle">
+AI-powered macro & market news intelligence
+</div>
+
+</header>
+
+
+<div class="container">
+
+<div class="status">
+
+Status:
+<span>● SYSTEM ONLINE</span>
+
+<br>
+
+<span id="updated">
+Waiting for latest report...
+</span>
+
+</div>
+
+
+<div id="dashboard" class="grid">
+
+<div class="card">
+
+<h2>Loading...</h2>
+
+<p>
+Fetching latest market intelligence.
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+
+<footer>
+
+Market News Intelligence — Phase 1
+
+</footer>
+
+
+<script>
+
+/*
+------------------------------------------------------------
+IMPORTANT
+
+For now this dashboard uses demo/sample data.
+
+In the next step we will connect this page
+directly to your GitHub-generated JSON report.
+------------------------------------------------------------
+*/
+
+
+const demoData = {
+
+"Oil & Energy": [
+{
+title: "Oil market update",
+source: "Market News",
+summary: "Latest developments in global crude oil markets.",
+india: "Potential impact through inflation and energy costs.",
+crypto: "Indirect impact through macro risk sentiment.",
+criticality: "Medium",
+sentiment: "Neutral"
+}
+],
+
+"Bond & Central Bank": [
+{
+title: "US Treasury market update",
+source: "Market News",
+summary: "Latest movement in US Treasury yields.",
+india: "Higher US yields can affect global capital flows.",
+crypto: "Higher yields can pressure risk assets.",
+criticality: "High",
+sentiment: "Bearish"
+}
+],
+
+"War & Geopolitics": [
+{
+title: "Geopolitical developments",
+source: "Market News",
+summary: "Latest geopolitical developments.",
+india: "Potential impact through crude, risk sentiment and flows.",
+crypto: "Potential volatility increase.",
+criticality: "Medium",
+sentiment: "Neutral"
+}
+],
+
+"Tariff & Trade": [
+{
+title: "Global trade update",
+source: "Market News",
+summary: "Latest developments in tariffs and international trade.",
+india: "Potential impact on exports, imports and sectors.",
+crypto: "Possible risk-off impact.",
+criticality: "Medium",
+sentiment: "Neutral"
+}
+],
+
+"Gold & Metals": [
+{
+title: "Gold market update",
+source: "Market News",
+summary: "Latest developments in gold and metals.",
+india: "Gold prices can affect inflation and currency dynamics.",
+crypto: "Gold can reflect broader safe-haven demand.",
+criticality: "Medium",
+sentiment: "Neutral"
+}
+],
+
+"Indian Market": [
+{
+title: "Nifty / Sensex market update",
+source: "Market News",
+summary: "Latest Indian equity market developments.",
+india: "Direct relevance for Indian equities.",
+crypto: "May influence broader risk sentiment.",
+criticality: "High",
+sentiment: "Neutral"
+}
+],
+
+"Crypto Market": [
+{
+title: "Bitcoin market update",
+source: "Market News",
+summary: "Latest Bitcoin and crypto market developments.",
+india: "Limited direct impact on Nifty.",
+crypto: "Direct relevance for BTC.",
+criticality: "High",
+sentiment: "Neutral"
+}
+],
+
+"Global Indices": [
+{
+title: "Global equity market update",
+source: "Market News",
+summary: "Latest developments in global equity indices.",
+india: "Global risk sentiment can affect Indian equities.",
+crypto: "Global risk appetite can affect crypto.",
+criticality: "Medium",
+sentiment: "Neutral"
+}
+]
+
+};
+
+
+function renderDashboard(data) {
+
+    const dashboard =
+        document.getElementById("dashboard");
+
+    dashboard.innerHTML = "";
+
+    Object.entries(data).forEach(
+        ([segment, articles]) => {
+
+            const card =
+                document.createElement("div");
+
+            card.className = "card";
+
+            let html =
+                `<h2>${segment}</h2>`;
+
+            articles.forEach(article => {
+
+                html += `
+
+                <div class="article">
+
+                    <div class="title">
+                        ${article.title}
+                    </div>
+
+                    <div class="meta">
+                        ${article.source}
+                    </div>
+
+                   
