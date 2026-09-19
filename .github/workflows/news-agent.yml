@@ -1,0 +1,37 @@
+name: Market News Intelligence
+
+on:
+  workflow_dispatch:
+
+  schedule:
+    - cron: "*/30 * * * *"
+
+jobs:
+  run-news-agent:
+
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Run Market News Agent
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          GEMINI_MODEL: gemini-3.8-flash
+          MAX_ARTICLES_PER_SEGMENT: 5
+          RSS_RESULTS_PER_QUERY: 8
+        run: |
+          python market_news_agent_github.py
+
+      - name: Upload news report
+        uses: actions/upload-artifact@v4
+        with:
+          name: market-news-report
+          path: data/*.json
